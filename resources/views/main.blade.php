@@ -7,6 +7,7 @@
     <title>{{ $title }}</title>
     <meta name="description" content="">
     <meta name="keywords" content="">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Favicons -->
     <link href="/assets/img/favicon.png" rel="icon">
@@ -29,15 +30,52 @@
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/trix@2.0.8/dist/trix.css">
     <script type="text/javascript" src="https://unpkg.com/trix@2.0.8/dist/trix.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-</head>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
-<body class="index-page" style="backgorund-color: #f7f7f7;">
+    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<style>
+    .notification.read {
+        background-color: #ffffff;
+    }
+    
+    .notification.unread {
+        background-color: #f0f0f0;
+    }
+</style>
+
+<body class="index-page" style="background-color: #f7f7f7;">
 
     @include('components.navbar')
     <main class="main">
         @yield('container')
     </main>
+
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="notificationRight" aria-labelledby="offcanvasRightLabel">
+        <div class="offcanvas-header">
+            <h5 id="notificationRightLabel">Notification</h5>
+            <button type="button" class="btn-close text-reset px-3" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body px-0 py-0">
+            @foreach ($notifications as $index => $notification)
+                <div id="notification-{{ $index }}"
+                    class="notification ps-3 pe-4 py-2 {{ $notification->notificationReads->first()->user ? 'read' : 'unread' }}">
+                    <div class="d-flex align-items-center gap-4">
+                        <div class="notification-img overflow-hidden p-1" style="width: 60px; height: 60px;">
+                            <img src="{{ $notification->recipient_id ? $notification->causer->image ?? '/assets/img/guest-image.webp' : '/assets/img/mail-icon.png' }}"
+                                alt="" style="width: 100%;">
+                        </div>
+                        <div>
+                            <p class="mb-0" style="font-size: .9em;">{{ $notification->content }}</p>
+                            <time datetime="2020-01-01" style="font-size: .8em;">{{ $notification->created_at }}</time>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
 
     @if (!request()->route()->getName())
         <footer id="footer" class="footer dark-background">
@@ -149,6 +187,51 @@
             });
         </script>
     @endif
+
+    <script>
+        Pusher.logToConsole = true;
+        var pusher = new Pusher('41ef74a792ecc12db0d7', {
+            cluster: 'ap1',
+            channelAuthorization: {
+                endpoint: `/broadcasting/auth`,
+                headers: {
+                    "Access-Control-Allow-Origin": "*"
+                }
+            }
+        });
+
+        const channelGlobal = pusher.subscribe(`notification`);
+
+        function addNotification(data) {
+            const notificationHTML = `<div id="notification-${data.notification.id}" class="notification ps-3 pe-4 py-2 unread">
+                    <div class="d-flex align-items-center gap-4">
+                        <div class="notification-img overflow-hidden p-1" style="width: 60px; height: 60px;"><img
+                                src="${data.notification.recipient_id ? (data.causer.image ?? '/assets/img/guest-image.webp') : '/assets/img/mail-icon.png'}"
+                                alt="" style="width: 100%;"></div>
+                        <div>
+                            <p class="mb-0" style="font-size: .9em;">${data.notification.content}</p>
+                            <time datetime="2020-01-01" style="font-size: .8em;">${data.notification.created_at}</time>
+                        </div>
+                    </div>
+                </div>`;
+
+            $('#notificationRight .offcanvas-body').prepend(notificationHTML);
+            console.log($('.notification-read'))
+            $('.notification-read').each(function() {
+                console.log($(this))
+                let totalNotificationRead = $(this).text();
+                result = totalNotificationRead ? parseInt(totalNotificationRead) : 0;
+                $(this).text(result + 1);
+            })
+        }
+
+        channelGlobal.bind('event', addNotification);
+
+        const user_id = "{{ auth()->id() }}";
+        const channelPrivate = pusher.subscribe(`notification.${user_id}`);
+
+        channelPrivate.bind('event', addNotification)
+    </script>
 
     <!-- Vendor JS Files -->
     <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

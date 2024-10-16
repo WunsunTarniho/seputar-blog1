@@ -9,11 +9,19 @@ class Notification extends Model
 {
     use HasFactory;
 
+    protected $guarded = ['id'];
+
     public function notificationReads(){
         return $this->hasMany(NotificationRead::class);
     }
 
-    public function user(){
-        return $this->belongsTo(User::class);
+    public function recipient()
+    {
+        return $this->belongsTo(User::class, 'recipient_id');
+    }
+
+    public function causer()
+    {
+        return $this->belongsTo(User::class, 'causer_id');
     }
 }

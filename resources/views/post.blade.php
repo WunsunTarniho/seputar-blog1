@@ -6,8 +6,6 @@
             display: none;
         }
     </style>
-    <script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <div class="container">
         <div class="row">
             <div class="col-lg-8">
@@ -67,7 +65,7 @@
                                 <div id="comment-{{ $index }}" class="comment">
                                     <div class="d-flex">
                                         <div class="comment-img"><img
-                                                src="{{ $comment->user->image ?? 'https://media.istockphoto.com/id/1300845620/vector/user-icon-flat-isolated-on-white-background-user-symbol-vector-illustration.jpg?s=612x612&w=0&k=20&c=yBeyba0hUkh14_jgv1OKqIH0CCSWU_4ckRkAoy2p73o=' }}"
+                                                src="{{ $comment->user->image ?? '/assets/img/guest-image.webp' }}"
                                                 alt=""></div>
                                         <div>
                                             <h5><a href="">{{ $comment->user->username }}</a> <a href="#"
@@ -145,6 +143,7 @@
                     console.log(res)
                 },
                 error: function(err) {
+                    console.log(err)
                     Swal.fire({
                         icon: "error",
                         title: "Oops...",

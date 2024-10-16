@@ -27,6 +27,13 @@
                         <a href="/register">Register</a>
                     </li>
                 @else
+                    <li class="d-flex justify-content-between align-items-center d-lg-none">
+                        <a class="nav-link" href='#' data-bs-toggle="offcanvas"
+                            data-bs-target="#notificationRight" aria-controls="notificationRight">
+                            Notification
+                        </a>
+                        <span class="notification-read badge text-bg-danger me-4">{{ $notificationRead }}</span>
+                    </li>
                     <li class="d-lg-none d-block">
                         <a href="/logout">Logout</a>
                     </li>
@@ -35,14 +42,19 @@
             <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
         </nav>
 
-        <div class="d-lg-block d-none">
+        <div class="d-lg-flex align-items-center gap-4 d-none">
             @if (!Auth::check())
-                <a class="btn px-3 btn-secondary me-2" href="/login">Login</a>
+                <a class="btn px-3 btn-secondary" href="/login">Login</a>
                 <a class="btn px-3 btn-outline-secondary" href="/register">Register</a>
             @else
-                <a class="btn px-3 btn-secondary" href="/logout">Logout</a>
+                <a class="nav-link position-relative" href='#' data-bs-toggle="offcanvas"
+                    data-bs-target="#notificationRight" aria-controls="notificationRight">
+                    <i class="bi bi-envelope fs-3"></i>
+                    <span class="notification-read badge text-bg-danger position-absolute"
+                        style="right: -15px; bottom: 0px;">{{ $notificationRead }}</span>
+                </a>
+                <a class="btn btn-secondary" href="/logout">Logout</a>
             @endif
         </div>
-
     </div>
 </header>

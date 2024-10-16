@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('notification_reads', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
+            $table->foreignId('user_id')->nullable();
             $table->foreignId('notification_id');
             $table->boolean('is_read')->default(false);
         });

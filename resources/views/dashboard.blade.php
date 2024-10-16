@@ -112,15 +112,15 @@
                                     <ul class="trending-post">
                                         <li>
                                             @auth
-                                                <a href="/profile" class="border border-0 d-flex align-items-center justify-content-center gap-2">
-                                                    <img src="{{ auth()->user()->image ?? "https://media.istockphoto.com/id/1300845620/vector/user-icon-flat-isolated-on-white-background-user-symbol-vector-illustration.jpg?s=612x612&w=0&k=20&c=yBeyba0hUkh14_jgv1OKqIH0CCSWU_4ckRkAoy2p73o=" }}" width="50px" height="50px"
+                                                <a href="/profile" class="border border-0 d-flex align-items-center justify-content-start gap-2">
+                                                    <img src="{{ auth()->user()->image ?? '/assets/img/guest-image.webp' }}" width="50px" height="50px"
                                                         class="me-2 rounded-circle" />
                                                     <span class="text-wrap">{{ auth()->user()->username }}</span>
                                                 </a>
                                             @else
                                                 <a href="/login"
                                                     class="border border-0 d-flex align-items-center justify-content-start">
-                                                    <img src="https://media.istockphoto.com/id/1300845620/vector/user-icon-flat-isolated-on-white-background-user-symbol-vector-illustration.jpg?s=612x612&w=0&k=20&c=yBeyba0hUkh14_jgv1OKqIH0CCSWU_4ckRkAoy2p73o="
+                                                    <img src='/assets/img/guest-image.webp'
                                                         width="50px" height="50px" class="me-2 rouded-circle" />
                                                     <span>Guest</span>
                                                 </a>
