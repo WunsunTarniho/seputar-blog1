@@ -61,7 +61,7 @@
         <div class="offcanvas-body px-0 py-0">
             @foreach ($notifications as $index => $notification)
                 <div id="notification-{{ $index }}"
-                    class="notification ps-3 pe-4 py-2 {{ $notification->notificationReads->first()->user ? 'read' : 'unread' }}">
+                    class="notification ps-3 pe-4 py-2 {{ count($notification->notificationReads) ? 'read' : 'unread' }}">
                     <div class="d-flex align-items-center gap-4">
                         <div class="notification-img overflow-hidden p-1" style="width: 60px; height: 60px;">
                             <img src="{{ $notification->recipient_id ? $notification->causer->image ?? '/assets/img/guest-image.webp' : '/assets/img/mail-icon.png' }}"
@@ -83,7 +83,7 @@
                 <div class="row gy-4">
                     <div class="col-lg-4 col-md-6 footer-about">
                         <a href="index.html" class="logo d-flex align-items-center">
-                            <span class="sitename">Blog Uniq</span>
+                            <span class="sitename">Seputar Blog</span>
                         </a>
                         <div class="footer-contact pt-3">
                             <p>A108 Adam Street</p>
@@ -146,7 +146,7 @@
             </div>
 
             <div class="container copyright text-center mt-4">
-                <p>© <span>Copyright</span> <strong class="px-1 sitename">ZenBlog</strong> <span>All Rights
+                <p>© <span>Copyright</span> <strong class="px-1 sitename">Seputar Blog</strong> <span>All Rights
                         Reserved</span>
                 </p>
                 <div class="credits">
@@ -216,7 +216,6 @@
                 </div>`;
 
             $('#notificationRight .offcanvas-body').prepend(notificationHTML);
-            console.log($('.notification-read'))
             $('.notification-read').each(function() {
                 console.log($(this))
                 let totalNotificationRead = $(this).text();
@@ -230,7 +229,30 @@
         const user_id = "{{ auth()->id() }}";
         const channelPrivate = pusher.subscribe(`notification.${user_id}`);
 
-        channelPrivate.bind('event', addNotification)
+        channelPrivate.bind('event', addNotification);
+
+        $('#notificationRight .offcanvas-header .text-reset').click(function(){
+            $.ajax({
+                method: 'POST',
+                url: '/notificationRead',
+                data: {
+                    _token: "{{ csrf_token() }}",
+                },
+                success: function(res){
+                    $('#notificationRight .offcanvas-body .notification').each(function(){
+                        $(this).removeClass('unread');
+                        $(this).addClass('read');
+                        $('.notification-read').text('');
+                    })
+
+                    console.log(res)
+                },
+                error: function(err){
+                    console.log(err)
+                }
+            });
+
+        })
     </script>
 
     <!-- Vendor JS Files -->

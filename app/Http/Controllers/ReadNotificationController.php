@@ -2,16 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Post;
-use App\Models\Comment;
-use App\Events\NewComment;
 use App\Models\Notification;
-use Illuminate\Http\Request;
-use App\Events\NewNotification;
 use App\Models\NotificationRead;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class CommentController extends Controller
+class ReadNotificationController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -32,26 +28,28 @@ class CommentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, $postId)
+    public function store(Request $request)
     {
-        $causer = Auth::user();
+        $user = Auth::user();
+        $notifications = Notification::with('notificationReads')
+            ->where('recipient_id', null)
+            ->orWhere('recipient_id', $user->id)
+            ->get();
 
-        $comment = Comment::create([
-            'post_id' => $postId,
-            'content' => $request->content,
-            'user_id' => $causer->id,
+        foreach ($notifications as $index => $notification) {
+            if (!count($notification->notificationReads()->where('user_id', $user->id)->get())) {
+                NotificationRead::create([
+                    'user_id' => $user->id,
+                    'notification_id' => $notifications[$index]->id,
+                    'is_read' => true,
+                ]);
+            }
+        }
+
+        return response()->json([
+            'halo' => $notifications,
+            'message' => 'Notification already read.',
         ]);
-
-        $notification = Notification::create([
-            'causer_id' => $causer->id,
-            'recipient_id' => Post::find($postId)->user_id,
-            'content' => "$causer->username mengomentari postingan kamu",
-        ]);
-
-        broadcast(new NewComment($comment));
-        broadcast(new NewNotification($notification));
-
-        return response()->json($comment);
     }
 
     /**

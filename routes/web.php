@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ReadNotificationController;
 
 Route::get('/', [HomeController::class, 'home']);
 
@@ -21,3 +22,5 @@ Route::resource('post', PostController::class);
 Route::resource('post.comment', CommentController::class);
 Route::get('/oauth/google', [AuthController::class, 'redirectToGoogle']);
 Route::get('/oauth/google/callback', [AuthController::class, 'handleGoogleCallback']);
+Route::post('/notificationRead', [ReadNotificationController::class, 'store']);
+Route::post('/addview', [PostController::class, 'addView']);

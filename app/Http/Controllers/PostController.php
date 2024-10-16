@@ -17,6 +17,15 @@ class PostController extends Controller
         //
     }
 
+    public function addView(Request $request){
+        $post = Post::find($request->input('id'));
+        $post->update(['views' => $post->views + 1,]);
+
+        return response()->json([
+            'message' => 'New views',
+        ]);
+    }
+
     public function createSlug(Request $request)
     {
 

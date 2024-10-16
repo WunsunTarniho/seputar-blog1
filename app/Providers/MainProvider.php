@@ -27,20 +27,24 @@ class MainProvider extends ServiceProvider
         View::composer(['main', 'create.post', 'dashboard'], function ($view) {
             $categories = Category::all();
 
-            $notifications = Notification::where('recipient_id', null)
+            $notifications = Notification::with('notificationReads')
+                ->where('recipient_id', null)
                 ->orWhere('recipient_id', Auth::id())
-                ->with('notificationReads')
                 ->orderBy('created_at', 'desc')
                 ->get();
 
-            $notificationRead = NotificationRead::where(function ($query) {
-                $query->where('user_id', Auth::id())
-                    ->orWhere('is_read', false);
-            })->get();
+            $notificationRead = 0;
+            // @dd($notifications[0]->notificationReads()->where('user_id', Auth::id())->get());
+            foreach($notifications as $notification){
+                // @dd($notification->notificationReads()->where('user_id', Auth::id())->get());
+                if(!count($notification->notificationReads()->where('user_id', Auth::id())->get())){
+                    $notificationRead += 1;
+                }
+            }
 
             $view->with('categories', $categories);
             $view->with('notifications', $notifications);
-            $view->with('notificationRead', count($notificationRead));
+            $view->with('notificationRead', $notificationRead);
         });
     }
 }

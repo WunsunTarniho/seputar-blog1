@@ -32,7 +32,7 @@
                             data-bs-target="#notificationRight" aria-controls="notificationRight">
                             Notification
                         </a>
-                        <span class="notification-read badge text-bg-danger me-4">{{ $notificationRead }}</span>
+                        <span class="notification-read badge text-bg-danger me-4">{{ $notificationRead ? $notificationRead : ''}}</span>
                     </li>
                     <li class="d-lg-none d-block">
                         <a href="/logout">Logout</a>
@@ -51,7 +51,7 @@
                     data-bs-target="#notificationRight" aria-controls="notificationRight">
                     <i class="bi bi-envelope fs-3"></i>
                     <span class="notification-read badge text-bg-danger position-absolute"
-                        style="right: -15px; bottom: 0px;">{{ $notificationRead }}</span>
+                        style="right: -15px; bottom: 0px;">{{ $notificationRead ? $notificationRead : '' }}</span>
                 </a>
                 <a class="btn btn-secondary" href="/logout">Logout</a>
             @endif

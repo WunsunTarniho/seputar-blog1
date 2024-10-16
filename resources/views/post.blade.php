@@ -59,10 +59,10 @@
                                     style="border-radius: 2.5em;" name="content" placeholder="Your Comment*"></input>
                             </form>
                         </div>
-                        <h4 class="comments-count ps-1">{{ count($post->comments) }} Comments</h4>
+                        <h4 class="comments-count ps-2 fs-5">{{ count($post->comments) }} Comments</h4>
                         <div class="comment-container overflow-auto" style="min-height: 200px; max-height: 500px;">
                             @foreach ($post->comments as $index => $comment)
-                                <div id="comment-{{ $index }}" class="comment">
+                                <div id="comment-{{ $index }}" class="comment ps-2">
                                     <div class="d-flex">
                                         <div class="comment-img"><img
                                                 src="{{ $comment->user->image ?? '/assets/img/guest-image.webp' }}"
@@ -169,10 +169,42 @@
                                         </div>
                                     </div>
                                 </div>`;
+
             $('.comment-container').prepend(commentHtml);
 
             $('#comment-content').val('');
             $('.comments-count').text($('.comment-container .comment').length + " Comments");
         });
+
+        let viewTimeout;
+        
+        window.addEventListener('DOMContentLoaded', function() {
+            startTimeout();
+        });
+
+        window.addEventListener('beforeunload', function() {
+            clearTimeout(viewTimeout);
+        })
+
+        function startTimeout() {
+            clearTimeout(viewTimeout);
+
+            viewTimeout = setTimeout(() => {
+                $.ajax({
+                    method: 'POST',
+                    url: '/addview',
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        id: "{{ $post->id }}",
+                    },
+                    success: function(res) {
+                        console.log('View recorded:', res);
+                    },
+                    error: function(err) {
+                        console.log('Error:', err);
+                    }
+                });
+            }, 15000);
+        }
     </script>
 @endsection
