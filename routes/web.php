@@ -18,6 +18,7 @@ Route::middleware('auth')->group(function(){
     Route::get('/post/createSlug', [PostController::class, 'createSlug']);
     Route::resource('post.comment', CommentController::class);
     Route::post('/notificationRead', [ReadNotificationController::class, 'store']);
+    Route::get('/profile/post/{id}', [PostController::class, 'showOwn']);
 });
 
 Route::middleware('guest')->group(function(){

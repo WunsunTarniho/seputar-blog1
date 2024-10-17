@@ -15,21 +15,25 @@
                             <form action="/post/{{ $post->id }}" method="POST" enctype="multipart/form-data">
                                 @method('PUT')
                                 @csrf
-                                <input type="hidden" name="category_id" value="{{ old('category_id', $post->category_id) }}">
-                                <div class="position-absolute d-flex align-items-center gap-3 p-2" style="top: 0; right: 5px;">
-                                    <button type="button" class="btn btn-warning px-3 py-1 current-form btn-edit">
-                                        <i class="bi bi-pencil fs-5"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-danger px-3 py-1 current-form btn-delete">
-                                        <i class="bi bi-trash fs-5"></i>
-                                    </button>
-                                    <button type="submit" class="btn btn-primary px-3 py-1 new-form btn-save d-none">
-                                        <i class="bi bi-floppy fs-5"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-danger new-form cancel-edit d-none">
-                                        Cancel
-                                    </button>
-                                </div>
+                                <input type="hidden" name="category_id"
+                                    value="{{ old('category_id', $post->category_id) }}">
+                                @if (!request()->route()->getName())
+                                    <div class="position-absolute d-flex align-items-center gap-3 p-2"
+                                        style="top: 0; right: 5px;">
+                                        <button type="button" class="btn btn-warning px-3 py-1 current-form btn-edit">
+                                            <i class="bi bi-pencil fs-5"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-danger px-3 py-1 current-form btn-delete">
+                                            <i class="bi bi-trash fs-5"></i>
+                                        </button>
+                                        <button type="submit" class="btn btn-primary px-3 py-1 new-form btn-save d-none">
+                                            <i class="bi bi-floppy fs-5"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-danger new-form cancel-edit d-none">
+                                            Cancel
+                                        </button>
+                                    </div>
+                                @endif
                                 <div class="post-img current-image">
                                     <img src="{{ $post->image }}" alt="" class="img-fluid w-100">
                                 </div>
@@ -198,12 +202,12 @@
             }
         }
 
-        $('.btn-edit').on('click', function(){
+        $('.btn-edit').on('click', function() {
             $('.current-form').addClass('d-none')
             $('.new-form').removeClass('d-none')
         })
 
-        $('.cancel-edit').on('click', function(){
+        $('.cancel-edit').on('click', function() {
             $('.current-form').removeClass('d-none')
             $('.new-form').addClass('d-none')
         })
@@ -292,5 +296,54 @@
                 });
             }, 15000);
         }
+
+        $('.btn-delete').on('click', function() {
+            const swalWithBootstrapButtons = Swal.mixin();
+
+            swalWithBootstrapButtons.fire({
+                title: "Are you sure?",
+                text: "You won't be able to revert this!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel!",
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        method: "DELETE",
+                        url: '/post/{{ $post->id }}',
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            id: "{{ $post->id }}",
+                        },
+                        success: function(res) {
+                            swalWithBootstrapButtons.fire({
+                                title: "Deleted!",
+                                text: "Your file has been deleted.",
+                                icon: "success"
+                            }).then(result => {
+                                window.location.href = "/post";
+                            });
+                        },
+                        error: function(err) {
+                            swalWithBootstrapButtons.fire({
+                                icon: "error",
+                                title: "Oops...",
+                                text: "Something wrong! Try again!",
+                            })
+                        }
+                    })
+                } else if (
+                    result.dismiss === Swal.DismissReason.cancel
+                ) {
+                    swalWithBootstrapButtons.fire({
+                        title: "Cancelled",
+                        text: "Your canceled delete article.",
+                        icon: "error"
+                    });
+                }
+            });
+        })
     </script>
 @endsection

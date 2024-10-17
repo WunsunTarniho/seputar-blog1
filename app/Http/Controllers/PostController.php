@@ -80,9 +80,24 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Post $post)
+    {
+        $current_post = $post->where(['category_id' => $post->category_id])->orderBy('created_at', 'desc')->limit(5)->get();
+        return view('post', [
+            'title' => $post->title,
+            'post' => $post,
+            'current_post' => $current_post,
+        ]);
+    }
+
+    public function showOwn(String $id)
     {
         $post = Post::find($id);
+
+        if (Auth::id() != $post->user_id) {
+            abort(404);
+        }
+
         $current_post = $post->where(['category_id' => $post->category_id])->orderBy('created_at', 'desc')->limit(5)->get();
         return view('post', [
             'title' => $post->title,
@@ -141,6 +156,18 @@ class PostController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $current_post = Post::find($id);
+
+        if ($current_post->user_id != Auth::id()) {
+            abort(404);
+        }
+
+        $post = Post::findOrFail($id);
+        $post->comments()->delete();
+        $post->delete();
+
+        return response()->json([
+            'message' => 'Delete article successfully',
+        ]);
     }
 }
