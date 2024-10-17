@@ -32,6 +32,8 @@ return [
     'connections' => [
         'mongodb' => [
             'driver' => 'mongodb',
+            'host' => env('DB_HOST', ''),
+            "port" => "27017",
             'dsn' => env('DB_URI', 'mongodb+srv://username:password@<atlas-cluster-uri>/myappdb?retryWrites=true&w=majority'),
             'database' => 'blog_db',
         ],
@@ -151,7 +153,7 @@ return [
 
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
+            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_') . '_database_'),
         ],
 
         'default' => [

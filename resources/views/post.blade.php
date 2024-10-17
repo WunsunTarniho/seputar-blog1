@@ -116,7 +116,7 @@
                             <form class="col form-group" id="add-comment">
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                 <input id="comment-content" name="content" class="form-control px-4 py-2 border border-1"
-                                    style="border-radius: 2.5em;" name="content" placeholder="Your Comment*"></input>
+                                    style="border-radius: 2.5em;" name="content" placeholder="Your Comment*" autocomplete="false"></input>
                             </form>
                         </div>
                         <h4 class="comments-count ps-2 fs-5">{{ count($post->comments) }} Comments</h4>
@@ -244,7 +244,7 @@
         const channel = pusher.subscribe(`comments`);
 
         channel.bind('event', function(data) {
-            const commentHtml = `<div id="comment-${data.comment.post_id}" class="comment">
+            const commentHtml = `<div id="comment-${data.comment.post_id}" class="comment ps-2">
                                     <div class="d-flex">
                                         <div class="comment-img"><img
                                                 src="${data.user.image ?? "https://media.istockphoto.com/id/1300845620/vector/user-icon-flat-isolated-on-white-background-user-symbol-vector-illustration.jpg?s=612x612&w=0&k=20&c=yBeyba0hUkh14_jgv1OKqIH0CCSWU_4ckRkAoy2p73o="}"

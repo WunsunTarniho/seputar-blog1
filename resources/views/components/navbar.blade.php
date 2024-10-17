@@ -49,7 +49,7 @@
             <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
         </nav>
 
-        <div class="d-lg-flex align-items-center gap-4 d-none">
+        <div class="d-xl-flex align-items-center gap-4 d-none">
             @if (!Auth::check())
                 <a class="btn px-3 btn-secondary" href="/login">Login</a>
                 <a class="btn px-3 btn-outline-secondary" href="/register">Register</a>
