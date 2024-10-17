@@ -5,6 +5,10 @@
         .trix-button-row::-webkit-scrollbar {
             display: none;
         }
+
+        .attachment__caption {
+            display: none !important;
+        }
     </style>
     <section id="create-post">
         <div class="container">
@@ -44,7 +48,8 @@
                                             <option value="" hidden selected>--Select--</option>
                                             @foreach ($categories as $category)
                                                 @if (old('category_id') == $category->id)
-                                                    <option value="{{ $category->id }}" selected>{{ $category->name }}</option>
+                                                    <option value="{{ $category->id }}" selected>{{ $category->name }}
+                                                    </option>
                                                 @else
                                                     <option value="{{ $category->id }}">{{ $category->name }}</option>
                                                 @endif
@@ -57,9 +62,11 @@
                                     <div class="form-group col-md-6 mb-3">
                                         <label class="mb-1" for="imagePost">Image <span
                                                 class="text-danger">*</span></label>
-                                        <img class="mb-2" id="previewImg" src="#" alt="image-preview" style="display: none; max-width:100%;">
+                                        <img class="mb-2" id="previewImg" src="#" alt="image-preview"
+                                            style="display: none; max-width:100%;">
                                         <input type="file" class="form-control @error('image') is-invalid @enderror"
-                                            id="imagePost" name="image" accept="image/*" value="{{ old('image') }}" onchange="previewImage()">
+                                            id="imagePost" name="image" accept="image/*" value="{{ old('image') }}"
+                                            onchange="previewImage()">
                                         @error('image')
                                             <div class="text-danger small pt-1">{{ $message }}</div>
                                         @enderror
@@ -68,7 +75,8 @@
                                 <div class="form-group mb-3">
                                     <label class="mb-1" for="desc">Description <span
                                             class="text-danger">*</span></label>
-                                    <input type="hidden" class="form-control" name="desc" id="desc" value="{{ old('desc') }}">
+                                    <input type="hidden" class="form-control" name="desc" id="desc"
+                                        value="{{ old('desc') }}">
                                     @error('desc')
                                         <div class="text-danger small pb-1">{{ $message }}</div>
                                     @enderror
@@ -83,6 +91,23 @@
             </div>
         </div>
         <script>
+            document.addEventListener("trix-attachment-add", function(event) {
+                if (event.attachment.file) {
+                    const file = event.attachment.file;
+                    const reader = new FileReader();
+
+                    reader.onload = function(e) {
+                        const base64String = e.target.result;
+
+                        event.attachment.setAttributes({
+                            url: base64String,
+                        });
+                    };
+
+                    reader.readAsDataURL(file);
+                }
+            });
+
             title.addEventListener('change', () => {
                 fetch('/post/createSlug?title=' + title.value)
                     .then(response => response.json())

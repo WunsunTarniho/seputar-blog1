@@ -29,7 +29,7 @@
                         <div class="swiper-slide" style="background-image: url('{{ $post->image }}');">
                             <div class="content">
                                 <h2 class="mb-2"><a href="/post/{{ $post->id }}">{{ $post->title }}</a></h2>
-                                <p>{{ Str::limit(strip_tags(str_replace('&nbsp;', '', $post->desc)), 250) }}</p>
+                                <p>{!! Str::limit(strip_tags(str_replace('&nbsp;', '', $post->desc), '<figcaption>'), 250) !!}</p>
                             </div>
                         </div>
                     @endforeach
@@ -50,17 +50,17 @@
                         <div class="col-lg-4">
                             <div class="post-entry lg">
                                 <a href="/post/{{ $trendingPost[0]->id }}"><img src="{{ $trendingPost[0]->image }}"
-                                        alt="" class="img-fluid"></a>
+                                        alt="" class="img-fluid w-100"></a>
                                 <div class="post-meta">
                                     <span class="date">{{ $trendingPost[0]->category->name }}</span>
                                     <span class="mx-1">•</span>
                                     <span>{{ $trendingPost[0]->created_at }}</span>
                                 </div>
-                                <h2><a
+                                <h3 style="text-align: justify"><a
                                         href="/post/{{ $trendingPost[0]->id }}">{{ Str::limit($trendingPost[0]->title, 50) }}</a>
-                                </h2>
-                                <p class="mb-3 d-block">
-                                    {{ Str::limit(strip_tags(str_replace('&nbsp;', '', $trendingPost[0]->desc)), 250) }}
+                                </h3>
+                                <p class="mb-3 d-block" style="text-align: justify">
+                                    {!! Str::limit(strip_tags(str_replace('&nbsp;', '', $trendingPost[0]->desc), '<figcaption>'), 250) !!}
                                 </p>
                                 <p class="small text-secondary">{{ $trendingPost[0]->views ?? 0 }} views</p>
                                 <div class="d-flex align-items-center author">
@@ -81,7 +81,7 @@
                             <div class="col-lg-4 border-start custom-border">
                                 @foreach ($trendingPost->skip(1)->take(2) as $post)
                                     <div class="post-entry" style="min-height: 200px;">
-                                        <a href="/post/{{ $post->id }}"><img src="{{ $post->image }}" alt=""
+                                        <a href="/post/{{ $post->id }}"><img class="w-100" src="{{ $post->image }}" alt=""
                                                 class="img-fluid"></a>
                                         <div class="post-meta"><span class="date">{{ $post->category->name }}</span>
                                             <span class="mx-1">•</span>
@@ -97,7 +97,7 @@
                             <div class="col-lg-4 border-start custom-border">
                                 @foreach ($trendingPost->skip(3) as $post)
                                     <div class="post-entry" style="min-height: 200px;">
-                                        <a href="/post/{{ $post->id }}"><img src="{{ $post->image }}" alt=""
+                                        <a href="/post/{{ $post->id }}"><img class="w-100" src="{{ $post->image }}" alt=""
                                                 class="img-fluid"></a>
                                         <div class="post-meta"><span class="date">{{ $post->category->name }}</span>
                                             <span class="mx-1">•</span>
@@ -173,17 +173,17 @@
                             <div class="col-lg-4">
                                 <div class="post-list lg">
                                     <a href="/post/{{ $category->posts[0]->id }}"><img
-                                            src="{{ $category->posts[0]->image }}" alt="" class="img-fluid"></a>
+                                            src="{{ $category->posts[0]->image }}" alt="" class="img-fluid w-100"></a>
                                     <div class="post-meta">
                                         <span class="date">{{ $category->name }}</span>
                                         <span class="mx-1">•</span>
                                         <span>{{ $category->posts[0]->created_at }}</span>
                                     </div>
-                                    <h2><a
+                                    <h3 style="text-align: justify"><a
                                             href="/post/{{ $category->posts[0]->id }}">{{ $category->posts[0]->title }}</a>
-                                    </h2>
-                                    <p class="mb-3 d-block">
-                                        {{ Str::limit(strip_tags(str_replace('&nbsp;', '', $category->posts[0]->desc)), 250) }}
+                                    </h3>
+                                    <p class="mb-3 d-block" style="text-align: justify">
+                                        {!! Str::limit(strip_tags(str_replace('&nbsp;', '', $category->posts[0]->desc), '<figcaption>'), 250) !!}
                                     </p>
                                     <p class="small text-secondary">{{ $category->posts[0]->views ?? 0 }} views</p>
                                     <div class="d-flex align-items-center author">
@@ -202,7 +202,7 @@
                                     <div class="col-lg-4 border-start custom-border">
                                         @foreach ($category->posts->skip(1)->take(3) as $post)
                                             <div class="post-list">
-                                                <a href="/post/{{ $post->id }}"><img src="{{ $post->image }}"
+                                                <a href="/post/{{ $post->id }}"><img class="w-100" src="{{ $post->image }}"
                                                         alt="" class="img-fluid"></a>
                                                 <div class="post-meta"><span class="date">{{ $category->name }}</span>
                                                     <span class="mx-1">•</span> <span>{{ $post->created_at }}</span>
@@ -216,7 +216,7 @@
                                     <div class="col-lg-4 border-start custom-border">
                                         @foreach ($category->posts->skip(4)->take(3) as $post)
                                             <div class="post-list">
-                                                <a href="/post/{{ $post->id }}"><img src="{{ $post->image }}"
+                                                <a href="/post/{{ $post->id }}"><img class="w-100" src="{{ $post->image }}"
                                                         alt="" class="img-fluid"></a>
                                                 <div class="post-meta"><span class="date">{{ $category->name }}</span>
                                                     <span class="mx-1">•</span> <span>{{ $post->created_at }}</span>
@@ -282,7 +282,7 @@
                                     <div class="col-lg-4 border-start custom-border">
                                         @foreach ($category->posts->skip(1)->take(3) as $post)
                                             <div class="post-list">
-                                                <a href="/post/{{ $post->id }}"><img src="{{ $post->image }}"
+                                                <a href="/post/{{ $post->id }}"><img class="w-100" src="{{ $post->image }}"
                                                         alt="" class="img-fluid"></a>
                                                 <div class="post-meta"><span class="date">{{ $category->name }}</span>
                                                     <span class="mx-1">•</span> <span>{{ $post->created_at }}</span>
@@ -296,7 +296,7 @@
                                     <div class="col-lg-4 border-start custom-border">
                                         @foreach ($category->posts->skip(4)->take(3) as $post)
                                             <div class="post-list">
-                                                <a href="/post/{{ $post->id }}"><img src="{{ $post->image }}"
+                                                <a href="/post/{{ $post->id }}"><img class="w-100" src="{{ $post->image }}"
                                                         alt="" class="img-fluid"></a>
                                                 <div class="post-meta"><span class="date">{{ $category->name }}</span>
                                                     <span class="mx-1">•</span> <span>{{ $post->created_at }}</span>
@@ -318,11 +318,11 @@
                                         <span class="mx-1">•</span>
                                         <span>{{ $category->posts[0]->created_at }}</span>
                                     </div>
-                                    <h2><a
+                                    <h3 style="text-align: justify"><a
                                             href="/post/{{ $category->posts[0]->id }}">{{ $category->posts[0]->title }}</a>
-                                    </h2>
-                                    <p class="mb-3 d-block">
-                                        {{ Str::limit(strip_tags(str_replace('&nbsp;', '', $category->posts[0]->desc)), 250) }}
+                                    </h3>
+                                    <p class="mb-3 d-block" style="text-align: justify">
+                                        {!! Str::limit(strip_tags(str_replace('&nbsp;', '', $category->posts[0]->desc), '<figcaption>'), 250) !!}
                                     </p>
                                     <p class="small text-secondary">{{ $category->posts[0]->views ?? 0 }} views</p>
                                     <div class="d-flex align-items-center author">

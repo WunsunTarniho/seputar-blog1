@@ -12,20 +12,12 @@
                             class="bi bi-chevron-down toggle-dropdown"></i></a>
                     <ul>
                         @foreach ($categories as $category)
-                            <li><a href="#{{ Str::lower($category->name) }}-category">{{ $category->name }}</a></li>
+                            <li><a href="/#{{ Str::lower($category->name) }}-category">{{ $category->name }}</a></li>
                         @endforeach
                     </ul>
                 </li>
                 <li><a href="/about">About</a></li>
                 <li><a href="/contact">Contact</a></li>
-                <li class="dropdown">
-                    <a href="#" onclick="event.preventDefault()">
-                        <span>Others</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-                    <ul>
-                        <li><a href="/post">My Article</a></li>
-                    </ul>
-                    </a>
-                </li>
                 @if (!Auth::check())
                     <li class="d-lg-none d-flex justify-content-start align-items-center gap-2">
                         <a href="/login">Login</a>
@@ -33,6 +25,14 @@
                         <a href="/register">Register</a>
                     </li>
                 @else
+                    <li class="dropdown">
+                        <a href="#" onclick="event.preventDefault()">
+                            <span>Others</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                        <ul>
+                            <li><a href="/post">My Article</a></li>
+                        </ul>
+                        </a>
+                    </li>
                     <li class="d-flex justify-content-between align-items-center d-lg-none">
                         <a class="nav-link" href='#' data-bs-toggle="offcanvas"
                             data-bs-target="#notificationRight" aria-controls="notificationRight">
@@ -42,7 +42,7 @@
                             class="notification-read badge text-bg-danger me-4">{{ $notificationRead ? $notificationRead : '' }}</span>
                     </li>
                     <li class="d-lg-none d-block">
-                        <a href="/logout">Logout</a>
+                        <a href="/logout">Log out</a>
                     </li>
                 @endif
             </ul>

@@ -150,7 +150,6 @@
                                 <div>
                                     <h4>{{ $post->user->username }}</h4>
                                     <div class="social-links">
-                                        <a href="https://x.com/#"><i class="bi bi-twitter-x"></i></a>
                                         <a href="https://facebook.com/#"><i class="bi bi-facebook"></i></a>
                                         <a href="https://instagram.com/#"><i class="biu bi-instagram"></i></a>
                                         <a href="https://instagram.com/#"><i class="biu bi-linkedin"></i></a>
@@ -174,7 +173,7 @@
                     <h3 class="widget-title">Recent Posts</h3>
                     @foreach ($current_post as $p)
                         <div class="post-item">
-                            <img src="{{ $p->image }}" alt="" class="flex-shrink-0 rounded">
+                            <img src="{{ $p->image }}" alt="" class="flex-shrink-0 rounded h-auto">
                             <div>
                                 <h4><a href="/post/{{ $p->id }}">{{ Str::limit($p->title, 50) }}</a></h4>
                                 <time datetime="{{ $p->created_at }}">{{ $p->created_at }}</time>
@@ -212,9 +211,8 @@
             $('.new-form').addClass('d-none')
         })
 
-        Pusher.logToConsole = true;
-        var pusher = new Pusher('41ef74a792ecc12db0d7', {
-            cluster: 'ap1'
+        var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
+            cluster: '{{ env('PUSHER_APP_CLUSTER') }}'
         });
 
         document.getElementById('add-comment').addEventListener('submit', function(e) {

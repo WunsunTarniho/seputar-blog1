@@ -58,7 +58,7 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'title' => 'required|min:10',
+            'title' => 'required|min:20',
             'slug' => 'required|unique:posts|min:10',
             'category_id' => 'required',
             'desc' => 'required|min:100',
@@ -69,7 +69,7 @@ class PostController extends Controller
         $imageData = file_get_contents($image->getRealPath());
         $base64Image = base64_encode($imageData);
         $imagePath = 'data:' . $image->getClientMimeType() . ';base64,' . $base64Image;
-
+        $validated['image'] = $imagePath;
         $validated['user_id'] = Auth::id();
 
         Post::create($validated);
@@ -120,7 +120,7 @@ class PostController extends Controller
     public function update(Request $request, string $id)
     {
         $rules = [
-            'title' => 'required|min:10',
+            'title' => 'required|min:25',
             'category_id' => 'required',
             'desc' => 'required|min:100',
         ];

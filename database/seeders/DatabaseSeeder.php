@@ -49,6 +49,21 @@ class DatabaseSeeder extends Seeder
             'name' => 'Technology',
         ]);
 
+        Category::factory()->create([
+            'slug' => 'culture',
+            'name' => 'Social and Culture',
+        ]);
+
+        Category::factory()->create([
+            'slug' => 'education',
+            'name' => 'Education',
+        ]);
+
+        Category::factory()->create([
+            'slug' => 'entertainment',
+            'name' => 'Entertainment',
+        ]);
+
         $post1 = Post::factory()->create([
             'user_id' => $user1->id,
             'category_id' => $category1->id,

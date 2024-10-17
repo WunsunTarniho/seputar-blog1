@@ -40,9 +40,13 @@
     .notification.read {
         background-color: #ffffff;
     }
-    
+
     .notification.unread {
         background-color: #f0f0f0;
+    }
+
+    .attachment__caption {
+        display: none !important;
     }
 </style>
 
@@ -56,7 +60,8 @@
     <div class="offcanvas offcanvas-end" tabindex="-1" id="notificationRight" aria-labelledby="offcanvasRightLabel">
         <div class="offcanvas-header">
             <h5 id="notificationRightLabel">Notification</h5>
-            <button type="button" class="btn-close text-reset px-3" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            <button type="button" class="btn-close text-reset px-3" data-bs-dismiss="offcanvas"
+                aria-label="Close"></button>
         </div>
         <div class="offcanvas-body px-0 py-0">
             @foreach ($notifications as $index => $notification)
@@ -97,7 +102,7 @@
                             <a href="#"><i class="bi bi-linkedin"></i></a>
                         </div>
                     </div>
-                    <div class="col-lg-2 col-md-3 footer-links">
+                    {{-- <div class="col-lg-2 col-md-3 footer-links">
                         <h4>Useful Links</h4>
                         <ul>
                             <li><a href="#">Home</a></li>
@@ -139,7 +144,7 @@
                             <li><a href="#">Trodelas</a></li>
                             <li><a href="#">Flexo</a></li>
                         </ul>
-                    </div>
+                    </div> --}}
 
                 </div>
             </div>
@@ -182,8 +187,8 @@
 
     <script>
         Pusher.logToConsole = true;
-        var pusher = new Pusher('41ef74a792ecc12db0d7', {
-            cluster: 'ap1',
+        var pusher = new Pusher('{{ env('PUSHER_APP_KEY') }}', {
+            cluster: ''{{ env('PUSHER_APP_CLUSTER') }}'',
             channelAuthorization: {
                 endpoint: `/broadcasting/auth`,
                 headers: {
@@ -223,15 +228,15 @@
 
         channelPrivate.bind('event', addNotification);
 
-        $('#notificationRight .offcanvas-header .text-reset').click(function(){
+        $('#notificationRight .offcanvas-header .text-reset').click(function() {
             $.ajax({
                 method: 'POST',
                 url: '/notificationRead',
                 data: {
                     _token: "{{ csrf_token() }}",
                 },
-                success: function(res){
-                    $('#notificationRight .offcanvas-body .notification').each(function(){
+                success: function(res) {
+                    $('#notificationRight .offcanvas-body .notification').each(function() {
                         $(this).removeClass('unread');
                         $(this).addClass('read');
                         $('.notification-read').text('');
@@ -239,7 +244,7 @@
 
                     console.log(res)
                 },
-                error: function(err){
+                error: function(err) {
                     console.log(err)
                 }
             });
