@@ -25,7 +25,9 @@ class MainProvider extends ServiceProvider
     public function boot(): void
     {
         View::composer(['main', 'create.post', 'dashboard'], function ($view) {
-            $categories = Category::all();
+            $categories = Category::with(['posts' => function ($query) {
+                $query->orderBy('views', 'desc'); // Urutkan berdasarkan jumlah view (descending)
+            }])->get();
 
             $notifications = Notification::with('notificationReads')
                 ->where('recipient_id', null)
@@ -35,9 +37,9 @@ class MainProvider extends ServiceProvider
 
             $notificationRead = 0;
             // @dd($notifications[0]->notificationReads()->where('user_id', Auth::id())->get());
-            foreach($notifications as $notification){
+            foreach ($notifications as $notification) {
                 // @dd($notification->notificationReads()->where('user_id', Auth::id())->get());
-                if(!count($notification->notificationReads()->where('user_id', Auth::id())->get())){
+                if (!count($notification->notificationReads()->where('user_id', Auth::id())->get())) {
                     $notificationRead += 1;
                 }
             }

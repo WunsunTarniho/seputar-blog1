@@ -2,8 +2,6 @@
     <div class="container position-relative d-flex align-items-center justify-content-between">
 
         <a href="/" class="logo d-flex align-items-center me-auto me-xl-0">
-            <!-- Uncomment the line below if you also wish to use an image logo -->
-            <!-- <img src="assets/img/logo.png" alt=""> -->
             <h1 class="sitename">Seputar Blog</h1>
         </a>
 
@@ -20,6 +18,14 @@
                 </li>
                 <li><a href="/about">About</a></li>
                 <li><a href="/contact">Contact</a></li>
+                <li class="dropdown">
+                    <a href="#" onclick="event.preventDefault()">
+                        <span>Others</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                    <ul>
+                        <li><a href="/post">My Article</a></li>
+                    </ul>
+                    </a>
+                </li>
                 @if (!Auth::check())
                     <li class="d-lg-none d-flex justify-content-start align-items-center gap-2">
                         <a href="/login">Login</a>
@@ -32,7 +38,8 @@
                             data-bs-target="#notificationRight" aria-controls="notificationRight">
                             Notification
                         </a>
-                        <span class="notification-read badge text-bg-danger me-4">{{ $notificationRead ? $notificationRead : ''}}</span>
+                        <span
+                            class="notification-read badge text-bg-danger me-4">{{ $notificationRead ? $notificationRead : '' }}</span>
                     </li>
                     <li class="d-lg-none d-block">
                         <a href="/logout">Logout</a>

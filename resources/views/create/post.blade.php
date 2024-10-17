@@ -8,7 +8,7 @@
     </style>
     <section id="create-post">
         <div class="container">
-            <div class="row d-flex justify-content-center align-items-center" style="min-height: 70vh;">
+            <div class="row d-flex justify-content-center align-items-center" style="min-height: 80vh;">
                 <div class="col-12 col-md-10 col-lg-9 col-xl-8">
                     <div class="card shadow-2-strong overflow-hidden" style="border-radius: 1rem;">
                         <div class="card-body p-5">

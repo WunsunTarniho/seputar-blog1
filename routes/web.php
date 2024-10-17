@@ -13,14 +13,21 @@ Route::get('/login', function(){
     return view('auth.login');
 });
 
-Route::get('/register', [AuthController::class, 'registerView']);
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'manualLogin']);
-Route::get('/logout', [AuthController::class, 'logout']);
-Route::get('/post/createSlug', [PostController::class, 'createSlug']);
+Route::middleware('auth')->group(function(){
+    Route::get('/logout', [AuthController::class, 'logout']);
+    Route::get('/post/createSlug', [PostController::class, 'createSlug']);
+    Route::resource('post.comment', CommentController::class);
+    Route::post('/notificationRead', [ReadNotificationController::class, 'store']);
+});
+
+Route::middleware('guest')->group(function(){
+    Route::get('/register', [AuthController::class, 'registerView']);
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/login', [AuthController::class, 'manualLogin'])->name('login');
+    Route::get('/oauth/google', [AuthController::class, 'redirectToGoogle']);
+    Route::get('/oauth/google/callback', [AuthController::class, 'handleGoogleCallback']);
+});
+
 Route::resource('post', PostController::class);
-Route::resource('post.comment', CommentController::class);
-Route::get('/oauth/google', [AuthController::class, 'redirectToGoogle']);
-Route::get('/oauth/google/callback', [AuthController::class, 'handleGoogleCallback']);
-Route::post('/notificationRead', [ReadNotificationController::class, 'store']);
+
 Route::post('/addview', [PostController::class, 'addView']);

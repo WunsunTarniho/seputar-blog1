@@ -9,15 +9,24 @@ use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->except(['index', 'show']);
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        return view('posts', [
+            'title' => 'My Article',
+            'posts' => Post::where('user_id', Auth::id())->orderBy('created_at', 'desc')->get(),
+        ]);
     }
 
-    public function addView(Request $request){
+    public function addView(Request $request)
+    {
         $post = Post::find($request->input('id'));
         $post->update(['views' => $post->views + 1,]);
 
@@ -56,14 +65,10 @@ class PostController extends Controller
             'image' => 'required|image|file|max:2048',
         ]);
 
-        if ($request->file('image')) {
-            $image = $request->file('image');
-            $imageData = file_get_contents($image->getRealPath());
-            $base64Image = base64_encode($imageData);
-            $imagePath = 'data:' . $image->getClientMimeType() . ';base64,' . $base64Image;
-
-            $validated['image'] = $imagePath;
-        }
+        $image = $request->file('image');
+        $imageData = file_get_contents($image->getRealPath());
+        $base64Image = base64_encode($imageData);
+        $imagePath = 'data:' . $image->getClientMimeType() . ';base64,' . $base64Image;
 
         $validated['user_id'] = Auth::id();
 
@@ -99,7 +104,36 @@ class PostController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $rules = [
+            'title' => 'required|min:10',
+            'category_id' => 'required',
+            'desc' => 'required|min:100',
+        ];
+
+        $current_post = Post::find($id);
+
+        if ($current_post->slug != $request->input('slug')) {
+            $rules['slug'] = 'required|unique:posts|min:10';
+        }
+
+        if ($request->file('image')) {
+            $rules['image'] = 'image|file|max:2048';
+        }
+
+        $validated = $request->validate($rules);
+
+        if ($request->file('image')) {
+            $image = $request->file('image');
+            $imageData = file_get_contents($image->getRealPath());
+            $base64Image = base64_encode($imageData);
+            $imagePath = 'data:' . $image->getClientMimeType() . ';base64,' . $base64Image;
+
+            $validated['image'] = $imagePath;
+        }
+
+        $updatedPost = $current_post->update($validated);
+
+        return redirect("/post/$current_post->id")->with('success', 'Update Article Successfully!');
     }
 
     /**
