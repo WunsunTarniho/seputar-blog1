@@ -2,8 +2,9 @@
     "version": 2,
       "framework": null,
     "functions": {
-        "api/index.php": { "runtime": "vercel-php@0.6.0" }
+        "api/index.php": { "runtime": "vercel-php@0.7.0" }
     },
+    "outputDirectory": "public",
     "routes": [{
         "src": "/(.*)",
         "dest": "/api/index.php"
@@ -19,7 +20,7 @@
         "APP_ROUTES_CACHE": "/tmp/routes.php",
         "APP_SERVICES_CACHE": "/tmp/services.php",
         "VIEW_COMPILED_PATH": "/tmp",
-
+        "DB_CONNECTION": "mongodb",
         "CACHE_DRIVER": "array",
         "LOG_CHANNEL": "stderr",
         "SESSION_DRIVER": "cookie"
