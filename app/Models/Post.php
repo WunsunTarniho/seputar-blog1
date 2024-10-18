@@ -12,6 +12,11 @@ class Post extends Model
 
     protected $guarded = ['id'];
 
+    // public function getRouteKeyName()
+    // {
+    //     return 'slug';
+    // }
+
     public function comments(){
         return $this->hasMany(Comment::class);
     }
