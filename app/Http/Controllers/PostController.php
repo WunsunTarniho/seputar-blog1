@@ -148,7 +148,7 @@ class PostController extends Controller
 
         $updatedPost = $current_post->update($validated);
 
-        return redirect("/post/$current_post->id")->with('success', 'Update Article Successfully!');
+        return redirect("/profile/post/$current_post->id")->with('success', 'Update Article Successfully!');
     }
 
     /**

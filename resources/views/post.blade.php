@@ -5,6 +5,15 @@
         .comment-container::-webkit-scrollbar {
             display: none;
         }
+
+        .attachment.attachment--preview img{
+            max-height: 300px !important;
+            width: auto !important;
+            height: auto !important;
+            max-width: 100%;
+            display: block;
+            margin: auto;
+        }
     </style>
     <div class="container">
         <div class="row">
@@ -48,7 +57,7 @@
                                         <div class="text-danger small pt-1 ms-4">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <h2 class="title current-form">{{ $post->title }}</h2>
+                                <h2 class="title current-form px-3" style="text-align: justify">{{ $post->title }}</h2>
                                 <div class="new-form d-none">
                                     <input type="text" name="title"
                                         class="form-control title bg-light px-3 @error('title') is-invalid @enderror"
@@ -67,7 +76,7 @@
                                     @enderror
                                 </div>
 
-                                <div class="meta-top">
+                                <div class="meta-top px-3">
                                     <ul class="d-flex gap-3 align-items-center">
                                         <li class="d-flex align-items-center ps-0"><i class="bi bi-person"></i> <a
                                                 href="/{{ $post->user->username }}">{{ $post->user->username }}</a></li>
@@ -79,10 +88,9 @@
                                                 href="#">{{ $post->views }} Views</a></li>
                                     </ul>
                                 </div>
-                                <div class="content mb-3 current-form">
+                                <div class="content mb-3 current-form px-3" style="text-align: justify">
                                     {!! $post->desc !!}
                                 </div>
-
                                 <div class="d-none new-form mt-3">
                                     <input type="hidden" class="form-control" name="desc" id="desc"
                                         value="{{ old('desc', $post->desc) }}">
@@ -93,7 +101,7 @@
                                         input='desc' style="min-height: 300px;"></trix-editor>
                                 </div>
                             </form>
-                            <div class="meta-bottom">
+                            <div class="meta-bottom px-4">
                                 <i class="bi bi-folder"></i>
                                 <ul class="cats">
                                     <li><a href="#">Business</a></li>
@@ -113,10 +121,11 @@
                 <section id="blog-comments" class="blog-comments section">
                     <div class="container">
                         <div class="row mb-3">
-                            <form class="col form-group" id="add-comment">
+                            <form class="col form-group" id="add-comment" autocomplete="off">
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                 <input id="comment-content" name="content" class="form-control px-4 py-2 border border-1"
-                                    style="border-radius: 2.5em;" name="content" placeholder="Your Comment*" autocomplete="false"></input>
+                                    style="border-radius: 2.5em;" name="content" placeholder="Your Comment*"
+                                    autocomplete="false"></input>
                             </form>
                         </div>
                         <h4 class="comments-count ps-2 fs-5">{{ count($post->comments) }} Comments</h4>
@@ -200,6 +209,23 @@
                 previewImg.src = readerEvent.target.result;
             }
         }
+
+        document.addEventListener("trix-attachment-add", function(event) {
+            if (event.attachment.file) {
+                const file = event.attachment.file;
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    const base64String = e.target.result;
+
+                    event.attachment.setAttributes({
+                        url: base64String,
+                    });
+                };
+
+                reader.readAsDataURL(file);
+            }
+        });
 
         $('.btn-edit').on('click', function() {
             $('.current-form').addClass('d-none')

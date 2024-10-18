@@ -26,7 +26,7 @@
             </script>
                 <div class="swiper-wrapper">
                     @foreach ($trendingPost->take(4) as $post)
-                        <div class="swiper-slide" style="background-image: url('{{ $post->image }}');">
+                        <div class="swiper-slide" style="background-image: url('{{ $post->image }}'); background-position: center;">
                             <div class="content">
                                 <h2 class="mb-2"><a href="/post/{{ $post->id }}">{{ $post->title }}</a></h2>
                                 <p>{!! Str::limit(strip_tags(str_replace('&nbsp;', '', $post->desc), '<figcaption>'), 250) !!}</p>
