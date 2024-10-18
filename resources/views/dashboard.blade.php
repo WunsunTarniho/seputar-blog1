@@ -1,6 +1,16 @@
 @extends('main')
 
 @section('container')
+    <style>
+        .post-list img, .post-entry img {
+            transform: scale(1);
+            transition: .3s ease;
+        }
+
+        .post-list img:hover, .post-entry img:hover {
+            transform: scale(1.05);
+        }
+    </style>
     <section id="slider" class="slider section dark-background">
         <div class="container" data-aos="fade-up" data-aos-delay="100">
             <div class="swiper init-swiper">
@@ -26,7 +36,8 @@
             </script>
                 <div class="swiper-wrapper">
                     @foreach ($trendingPost->take(4) as $post)
-                        <div class="swiper-slide" style="background-image: url('{{ $post->image }}'); background-position: center;">
+                        <div class="swiper-slide"
+                            style="background-image: url('{{ $post->image }}'); background-position: center;">
                             <div class="content">
                                 <h2 class="mb-2"><a href="/post/{{ $post->id }}">{{ $post->title }}</a></h2>
                                 <p>{!! Str::limit(strip_tags(str_replace('&nbsp;', '', $post->desc), '<figcaption>'), 250) !!}</p>
@@ -81,8 +92,8 @@
                             <div class="col-lg-4 border-start custom-border">
                                 @foreach ($trendingPost->skip(1)->take(2) as $post)
                                     <div class="post-entry" style="min-height: 200px;">
-                                        <a href="/post/{{ $post->id }}"><img class="w-100" src="{{ $post->image }}" alt=""
-                                                class="img-fluid"></a>
+                                        <a href="/post/{{ $post->id }}"><img class="w-100" src="{{ $post->image }}"
+                                                alt="" class="img-fluid"></a>
                                         <div class="post-meta"><span class="date">{{ $post->category->name }}</span>
                                             <span class="mx-1">•</span>
                                             <span>{{ $post->created_at }}</span>
@@ -97,8 +108,8 @@
                             <div class="col-lg-4 border-start custom-border">
                                 @foreach ($trendingPost->skip(3) as $post)
                                     <div class="post-entry" style="min-height: 200px;">
-                                        <a href="/post/{{ $post->id }}"><img class="w-100" src="{{ $post->image }}" alt=""
-                                                class="img-fluid"></a>
+                                        <a href="/post/{{ $post->id }}"><img class="w-100" src="{{ $post->image }}"
+                                                alt="" class="img-fluid"></a>
                                         <div class="post-meta"><span class="date">{{ $post->category->name }}</span>
                                             <span class="mx-1">•</span>
                                             <span>{{ $post->created_at }}</span>
@@ -158,10 +169,10 @@
     </section>
 
     @foreach ($categories as $index => $category)
-        @if ($index % 2 == 0)
-            <section id="{{ Str::lower($category->name) }}-category"
-                class="{{ $category->name }}-category section category">
-                @if (count($category->posts))
+        @if (count($category->posts))
+            @if ($index % 2 == 0)
+                <section id="{{ Str::lower($category->name) }}-category"
+                    class="{{ $category->name }}-category section category">
                     <div class="container section-title" data-aos="fade-up">
                         <div class="section-title-container d-flex align-items-center justify-content-between">
                             <h2>{{ $category->name }}</h2>
@@ -173,7 +184,8 @@
                             <div class="col-lg-4">
                                 <div class="post-list lg">
                                     <a href="/post/{{ $category->posts[0]->id }}"><img
-                                            src="{{ $category->posts[0]->image }}" alt="" class="img-fluid w-100"></a>
+                                            src="{{ $category->posts[0]->image }}" alt=""
+                                            class="img-fluid w-100"></a>
                                     <div class="post-meta">
                                         <span class="date">{{ $category->name }}</span>
                                         <span class="mx-1">•</span>
@@ -202,8 +214,8 @@
                                     <div class="col-lg-4 border-start custom-border">
                                         @foreach ($category->posts->skip(1)->take(3) as $post)
                                             <div class="post-list">
-                                                <a href="/post/{{ $post->id }}"><img class="w-100" src="{{ $post->image }}"
-                                                        alt="" class="img-fluid"></a>
+                                                <a href="/post/{{ $post->id }}"><img class="w-100"
+                                                        src="{{ $post->image }}" alt="" class="img-fluid"></a>
                                                 <div class="post-meta"><span class="date">{{ $category->name }}</span>
                                                     <span class="mx-1">•</span> <span>{{ $post->created_at }}</span>
                                                 </div>
@@ -216,8 +228,8 @@
                                     <div class="col-lg-4 border-start custom-border">
                                         @foreach ($category->posts->skip(4)->take(3) as $post)
                                             <div class="post-list">
-                                                <a href="/post/{{ $post->id }}"><img class="w-100" src="{{ $post->image }}"
-                                                        alt="" class="img-fluid"></a>
+                                                <a href="/post/{{ $post->id }}"><img class="w-100"
+                                                        src="{{ $post->image }}" alt="" class="img-fluid"></a>
                                                 <div class="post-meta"><span class="date">{{ $category->name }}</span>
                                                     <span class="mx-1">•</span> <span>{{ $post->created_at }}</span>
                                                 </div>
@@ -247,12 +259,10 @@
                             </div>
                         </div>
                     </div>
-                @endif
-            </section>
-        @else
-            <section id="{{ Str::lower($category->name) }}-category"
-                class="{{ $category->name }}-category section category">
-                @if (count($category->posts))
+                </section>
+            @else
+                <section id="{{ Str::lower($category->name) }}-category"
+                    class="{{ $category->name }}-category section category">
                     <div class="container section-title" data-aos="fade-up">
                         <div class="section-title-container d-flex align-items-center justify-content-between">
                             <h2>{{ $category->name }}</h2>
@@ -282,8 +292,8 @@
                                     <div class="col-lg-4 border-start custom-border">
                                         @foreach ($category->posts->skip(1)->take(3) as $post)
                                             <div class="post-list">
-                                                <a href="/post/{{ $post->id }}"><img class="w-100" src="{{ $post->image }}"
-                                                        alt="" class="img-fluid"></a>
+                                                <a href="/post/{{ $post->id }}"><img class="w-100"
+                                                        src="{{ $post->image }}" alt="" class="img-fluid"></a>
                                                 <div class="post-meta"><span class="date">{{ $category->name }}</span>
                                                     <span class="mx-1">•</span> <span>{{ $post->created_at }}</span>
                                                 </div>
@@ -296,8 +306,8 @@
                                     <div class="col-lg-4 border-start custom-border">
                                         @foreach ($category->posts->skip(4)->take(3) as $post)
                                             <div class="post-list">
-                                                <a href="/post/{{ $post->id }}"><img class="w-100" src="{{ $post->image }}"
-                                                        alt="" class="img-fluid"></a>
+                                                <a href="/post/{{ $post->id }}"><img class="w-100"
+                                                        src="{{ $post->image }}" alt="" class="img-fluid"></a>
                                                 <div class="post-meta"><span class="date">{{ $category->name }}</span>
                                                     <span class="mx-1">•</span> <span>{{ $post->created_at }}</span>
                                                 </div>
@@ -337,8 +347,8 @@
                             </div>
                         </div>
                     </div>
-                @endif
-            </section>
+                </section>
+            @endif
         @endif
     @endforeach
 @endsection
